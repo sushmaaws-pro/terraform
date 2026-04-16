@@ -1,35 +1,9 @@
-resource "aws_instance" "terraform" {
-    #count = 10
-    count = length(var.instances)
-    ami = "ami-09c813fb71547fc4f"
-    instance_type = "t3.micro"
-    vpc_security_group_ids = [aws_security_group.allow_all.id]
-    tags = {
-        Name = var.instances[count.index]
-        Terraform = "true"
-        Project = "roboshop"
-    }
-}
-
-resource "aws_security_group" "allow_all" {
-  name   = "allow-all"
-
-  egress {
-    from_port        = 0 # from port 0 to to port 0 means all ports
-    to_port          = 0 
-    protocol         = "-1" # -1 means all protocols
-    cidr_blocks      = ["0.0.0.0/0"] # internet
-  }
-
-  ingress {
-    from_port        = 0 # from port 0 to to port 0 means all ports
-    to_port          = 0 
-    protocol         = "-1" # -1 means all protocols
-    cidr_blocks      = ["0.0.0.0/0"] # internet
-  }
-
-  tags = {
-    Name = "allow-all"
-  }
-
+resource "aws_route53_record" "roboshop" {
+  count = length(var.instances)
+  zone_id = "${var.zone_id}"
+  name    = "${var.instances[count.index]}.${var.domain_name}" # mongodb.daws86s.fun
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.terraform[count.index].private_ip]
+  allow_overwrite = true
 }
