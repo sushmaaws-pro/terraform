@@ -5,6 +5,15 @@ variable "instances" {
     #     redis = "t3.micro"
     #     mysql = "t3.small"
     # }
+
+    # default = {
+    #     mongodb = {
+    #         instance_type = "t3.micro"
+    #         ami = "ami-id"
+    #     }
+    #     redis = "t3.micro"
+    #     mysql = "t3.small"
+    # }
 }
 
 variable "zone_id" {
